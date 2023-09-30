@@ -99,30 +99,29 @@ namespace fos {
       return split_tokens;
    }
 
-   // Divides text into words while retaining additional line breaks
-   std::vector<std::string> splitParagraphs(std::string const& str) {
+   // Split a string into a vector of substrings using a specified delimiter
+   std::vector<std::string> splitWithEmpty(
+     std::string const& str, std::string _delimiter) {
       std::string divided { str };
       std::vector<std::string> split_tokens;
-      bool last_text { false };
 
-      while (divided.find_first_not_of("\n") != std::string::npos) {
-         size_t break_position { divided.find_first_of("\n") };
-         size_t text_position { divided.find_first_not_of("\n") };
+      while (divided.find_first_of(_delimiter) != std::string::npos) {
+         size_t first_delimiter { divided.find_first_of(_delimiter) };
+         size_t second_delimiter { divided.find_first_of(
+           _delimiter, first_delimiter + 1) };
+         size_t text { divided.find_first_not_of(_delimiter) };
 
-         if (break_position < text_position && last_text) {
-            split_tokens.push_back("\n");
-            last_text = false;
-            divided.erase(0, break_position + 1);
-         } else if (break_position > text_position
-           && break_position != std::string::npos) {
-            split_tokens.push_back(subString(divided, break_position));
-            divided.erase(0, break_position + 1);
-            last_text = true;
-         } else if (break_position == std::string::npos) {
-            split_tokens.push_back(subString(divided, divided.length()));
-            divided.clear();
+         if (text < first_delimiter) {
+            split_tokens.push_back(subString(divided, first_delimiter));
+            divided.erase(0, first_delimiter);
+         } else if (second_delimiter != std::string::npos) {
+            split_tokens.push_back(
+              subString(divided, second_delimiter, first_delimiter + 1));
+            divided.erase(0, second_delimiter);
          } else {
-            divided.erase(0, break_position + 1);
+            split_tokens.push_back(
+              subString(divided, divided.length(), first_delimiter + 1));
+            divided.erase();
          }
       }
 
@@ -164,7 +163,7 @@ namespace fos {
      std::string _new_delimiter) {
       std::ostringstream text;
       std::string line;
-      std::vector<std::string> phrases { splitParagraphs(str) };
+      std::vector<std::string> phrases { splitWithEmpty(str, "\n") };
 
       for (std::string& phrase : phrases) {
          std::string trimmed { trim(phrase) };
@@ -196,6 +195,7 @@ namespace fos {
          }
       }
 
+      text.str(rightTrim(text.str(), "\n"));
       return text.str();
    }
 
@@ -204,7 +204,7 @@ namespace fos {
    std::string alignment(std::string& str, size_t size, align _align,
      T _element, bool _dynamic_size, bool _right_space) {
       std::ostringstream justified;
-      std::vector<std::string> phrases { splitParagraphs(str) };
+      std::vector<std::string> phrases { splitWithEmpty(str, "\n") };
 
       std::string longest_line { trim(findLongestLine(str)) };
       size_t max_size { longest_line.length() };
@@ -269,6 +269,7 @@ namespace fos {
          justified << '\n';
       }
 
+      justified.str(rightTrim(justified.str(), "\n"));
       return justified.str();
    }
 
@@ -356,7 +357,7 @@ namespace fos {
 
    // Finds the longest line of text
    std::string findLongestLine(std::string const& str) {
-      std::vector<std::string> lines { splitParagraphs(str) };
+      std::vector<std::string> lines { splitWithEmpty(str, "\n") };
       std::string max_line { lines.front() };
       std::string max_line_trimmed { trim(max_line) };
 
@@ -383,7 +384,7 @@ namespace fos {
          _size = findLongestLine(str).size();
       }
 
-      std::vector<std::string> lines { splitParagraphs(str) };
+      std::vector<std::string> lines { splitWithEmpty(str, "\n") };
 
       for (std::string& line : lines) {
          line += repeat(_complete, _size - line.size(), true);
