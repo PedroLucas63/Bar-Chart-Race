@@ -19,13 +19,17 @@ using std::string;
 #include "fstring.hpp" /// repeat, setStyle, green
 using fos::repeat;
 using fos::setStyle;
-using fos::foreground::green;
 
 #include <iostream> /// cout
 using std::cout;
 
 #include <sstream> /// ostringstream
 using std::ostringstream;
+
+///< Definition of system constants >//
+constexpr short DEFAULT_BAR_COLOR {
+   fos::foreground::green
+}; ///< Default bar color
 
 /**
  * @brief The Bar class represents an individual bar in a bar chart
@@ -132,10 +136,11 @@ class Bar {
     * @param bar_size The size of the bar
     * @param _base_value The base value to determine the bar's height (default:
     * 0)
-    * @param _color The color to use for rendering the bar (default: green)
+    * @param _color The color to use for rendering the bar (default:
+    * DEFAULT_BAR_COLOR)
     */
-   void draw(
-     short bar_size, double _base_value = 0, short const _color = green) const;
+   void draw(short bar_size, double _base_value = 0,
+     short const _color = DEFAULT_BAR_COLOR) const;
 
    private:
    string label; ///< The label of the bar
