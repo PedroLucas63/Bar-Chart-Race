@@ -13,7 +13,8 @@ include_directories("${PROJECT_SOURCE_DIR}/classes"
 "${PROJECT_SOURCE_DIR}/functions/clioptions"
 "${PROJECT_SOURCE_DIR}/functions/utils"
 "${PROJECT_SOURCE_DIR}/libs/format"
-"${PROJECT_SOURCE_DIR}/libs/fileini")
+"${PROJECT_SOURCE_DIR}/libs/fileini"
+"${PROJECT_SOURCE_DIR}/libs/searching")
 
 add_executable(barchart ${PROJECT_SOURCE_DIR}/main.cpp
                     ${PROJECT_SOURCE_DIR}/classes/Bar.cpp
