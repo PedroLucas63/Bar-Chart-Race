@@ -58,6 +58,28 @@ class Bar {
        , value(value_) { }
 
    /**
+    * @brief Overload of the less than (<) operator for the Bar class
+    *
+    * This operator allows comparing two Bar objects and determining whether the
+    * current object is less than the object passed as an argument.
+    *
+    * @param rhs The Bar object to compare with the current object
+    * @return true if the current object is less than rhs, otherwise, false
+    */
+   bool operator<(Bar const& rhs);
+
+   /**
+    * @brief Overload of the greater than (>) operator for the Bar class
+    *
+    * This operator allows comparing two Bar objects and determining whether the
+    * current object is greater than the object passed as an argument.
+    *
+    * @param rhs The Bar object to compare with the current object
+    * @return true if the current object is greater than rhs, otherwise, false
+    */
+   bool operator>(Bar const& rhs);
+
+   /**
     * @brief Get the label of the bar
     * @return The label of the bar as a string
     */

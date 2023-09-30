@@ -12,6 +12,16 @@
 
 #include "Bar.hpp"
 
+// Overload of the less than (<) operator for the Bar class
+bool Bar::operator<(Bar const& rhs) {
+   return value < rhs.getValue();
+}
+
+// Overload of the greater than (>) operator for the Bar class
+bool Bar::operator>(Bar const& rhs) {
+   return value > rhs.getValue();
+}
+
 // Get the label of the bar
 string Bar::getLabel() const {
    return label;
@@ -62,11 +72,11 @@ void Bar::draw(short bar_size, double _base_value, short const _color) const {
    }
 
    ostringstream oss;
-   oss << setStyle(repeat("\u2588", size), green) << " "
-       << setStyle(label, green) << " ";
+   oss << setStyle(repeat("\u2588", size), _color) << " "
+       << setStyle(label, _color) << " ";
    if (!other_related_info.empty()) {
       string buffer { "(" + other_related_info + ")" };
-      oss << setStyle(buffer, green) << " ";
+      oss << setStyle(buffer, _color) << " ";
    }
 
    oss << "[" << value << "]";
