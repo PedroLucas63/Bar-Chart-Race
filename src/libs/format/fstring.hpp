@@ -133,36 +133,6 @@ namespace fos {
      std::string const& str, std::string _delimiter = " ");
 
    /**
-    * @brief Split a string into a vector of substrings using a specified
-    * delimiter
-    *
-    * This function splits the input string into multiple substrings based on
-    * the provided delimiter and stores these substrings in a vector. The key
-    * difference compared to the standard split function is that this function
-    * preserves empty substrings between consecutive delimiters.
-    *
-    * @param str The input string to be split
-    * @param _delimiter The delimiter used to split the string (default is " ")
-    * @return A vector of strings containing the resulting substrings from the
-    * split
-    *
-    * @code{.cpp}
-    * // Example usage:
-    * std::string input = "1,2,3,,4,5,6,,,7";
-    * std::vector<std::string> result = splitWithEmpty(input, ",");
-    * // result will contain: [1, 2, 3, , 4, 5, 6, , , 7]
-    * @endcode
-    *
-    * This function preserves the default position for each data, even if there
-    * is nothing between consecutive delimiters.
-    */
-   std::vector<std::string> splitWithEmpty(
-     std::string const& str, std::string _delimiter = " ");
-
-   std::vector<std::string> splitWithEmpty(
-     std::string const& str, std::string _delimiter = " ");
-
-   /**
     * @brief Repeat a given element a specified number of times
     *
     * @param element Element to be repeated
