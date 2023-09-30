@@ -33,10 +33,11 @@ constexpr bool DEFAULT_ENABLE_COLORS { true };
 /// Default help menu
 constexpr bool DEFAULT_HELP_MENU { false };
 
+/// Default bar chart columns configurations
 constexpr short COLUMNS { 5 };
 constexpr short COLUMN_1 { 1 };
 constexpr short COLUMN_2 { 2 };
-constexpr short COLUMN_3 { 3 };
+constexpr short COLUMN_3 { -1 }; ///< Disable
 constexpr short COLUMN_4 { 4 };
 constexpr short COLUMN_5 { 5 };
 
