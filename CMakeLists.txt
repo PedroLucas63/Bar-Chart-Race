@@ -19,6 +19,7 @@ include_directories("${PROJECT_SOURCE_DIR}/classes"
 add_executable(barchart ${PROJECT_SOURCE_DIR}/main.cpp
                     ${PROJECT_SOURCE_DIR}/classes/Bar.cpp
                     ${PROJECT_SOURCE_DIR}/classes/BarChart.cpp
+                    ${PROJECT_SOURCE_DIR}/classes/Database.cpp
                     ${PROJECT_SOURCE_DIR}/classes/GameController.cpp
                     ${PROJECT_SOURCE_DIR}/functions/clioptions/clioptions.cpp
                     ${PROJECT_SOURCE_DIR}/libs/fileini/fileini.cpp
