@@ -21,6 +21,7 @@ using sch::upperBound;
 
 #include "fstring.hpp" /// setStyle, blue, bold
 using fos::setStyle;
+using fos::repeat;
 using fos::foreground::blue;
 using fos::style::bold;
 
@@ -43,6 +44,10 @@ using std::map;
 
 #include <iostream> /// cout
 using std::cout;
+
+#include <math.h>
+using std::floor;
+using std::ceil;
 
 /**
  * @brief The BarChart class represents a bar chart with associated data
@@ -101,8 +106,8 @@ class BarChart {
     * @param _view_bars The number of bars to display
     * @param _colors A map of colors for different categories
     */
-   void draw(short bar_size, short _view_bars = 0,
-     map<string, short const> _colors = {}) const;
+   void draw(short bar_size, short _view_bars = 0, short _ticks = 0,
+     map<string, short> _colors = {}) const;
 
    private:
    string time_stamp; ///< The time stamp associated with the BarChart
