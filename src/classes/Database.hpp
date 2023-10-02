@@ -30,8 +30,11 @@ using std::cout;
 
 #include "fstring.hpp" /// setStyle, blue, yellow, bold
 using fos::setStyle;
+using fos::columnWrap;
+using fos::alignment;
 using fos::foreground::blue;
 using fos::foreground::yellow;
+using fos::align::center;
 using fos::style::bold;
 
 class Database {
@@ -53,7 +56,7 @@ class Database {
    void addCategory(string text, short color);
    void addBarChart(BarChart const* bar_chart);
 
-   void draw(short fps, short bar_size, short _view_bars = 0, short _ticks = 0);
+   void draw(short fps, short bar_size, short _view_bars = 0, short _ticks = 0, short _terminal_size = 0);
 
    private:
    string title;

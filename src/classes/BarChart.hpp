@@ -20,13 +20,18 @@
 using sch::upperBound;
 
 #include "fstring.hpp" /// setStyle, blue, bold
-using fos::setStyle;
+using fos::alignment;
+using fos::columnWrap;
 using fos::repeat;
+using fos::setStyle;
+using fos::align::center;
 using fos::foreground::blue;
+using fos::foreground::yellow;
 using fos::style::bold;
 
 #include <string> /// string
 using std::string;
+using std::to_string;
 
 #include <vector> /// vector
 using std::vector;
@@ -46,8 +51,9 @@ using std::map;
 using std::cout;
 
 #include <math.h>
-using std::floor;
 using std::ceil;
+using std::floor;
+using std::round;
 
 /**
  * @brief The BarChart class represents a bar chart with associated data
@@ -107,7 +113,10 @@ class BarChart {
     * @param _colors A map of colors for different categories
     */
    void draw(short bar_size, short _view_bars = 0, short _ticks = 0,
-     map<string, short> _colors = {}) const;
+     short _terminal_size = 0, map<string, short> _colors = {}) const;
+
+   void drawAxisX(short bar_size, short _view_bars = 0, short _ticks = 0,
+     short _terminal_size = 0) const;
 
    private:
    string time_stamp; ///< The time stamp associated with the BarChart

@@ -50,9 +50,14 @@ void BarChart::addBar(Bar const* bar) {
 }
 
 // Draw the BarChart with specified parameters
-void BarChart::draw(
-  short bar_size, short _view_bars, short _ticks, map<string, short> _colors) const {
+void BarChart::draw(short bar_size, short _view_bars, short _ticks,
+  short _terminal_size, map<string, short> _colors) const {
    string buffer { "Time stamp: " + time_stamp };
+
+   if (_terminal_size != 0) {
+      buffer = columnWrap(buffer, _terminal_size);
+      buffer = alignment(buffer, _terminal_size, center, " ");
+   }
 
    cout << setStyle(buffer, blue, -1, bold) << "\n\n";
 
@@ -76,40 +81,58 @@ void BarChart::draw(
       cout << "\n";
    }
 
-   _ticks = _ticks == 0 ? bars.size() : _ticks;
+   drawAxisX(bar_size, _view_bars, _ticks, _terminal_size);
+}
 
-   double minimum_value { bars.size() > _view_bars ? bars[_view_bars - 1]->getValue() : bars.back()->getValue()};
-   minimum_value = static_cast<int>(floor(minimum_value / 100) * 100);
-   double maximum_value { bars.front()->getValue() };
-   maximum_value  = static_cast<int>(ceil(maximum_value / 100) * 100);
+void BarChart::drawAxisX(
+  short bar_size, short _view_bars, short _ticks, short _terminal_size) const {
 
-   double divided_distance { (maximum_value - minimum_value) / _ticks};
-   int ticks_distance { static_cast<int>(divided_distance * bar_size / maximum_value) };
+   string axis_x;
 
-   short pos_ticks[_ticks];
-   pos_ticks[0] = minimum_value * bar_size / maximum_value;
-
-   for (short index { 1 }; index != _ticks - 1; ++index) {
-      pos_ticks[index] = pos_ticks[index - 1] + ticks_distance;
+   if (_terminal_size != 0) {
+      axis_x = repeat('-', _terminal_size - 1);
+   } else {
+      axis_x = repeat('-', bar_size * 2 - 1);
    }
 
-   pos_ticks[_ticks - 1] = bar_size;
+   axis_x += '>';
 
-   string x_axis { repeat("-", bar_size * 2)};
-   string numbers { repeat(" ", bar_size * 2)};
-   x_axis[0] = '+';
-   numbers[0] = 0;
+   string axis_x_numbers { repeat(' ', bar_size * 2 - 1) };
 
-   int value { static_cast<int>(minimum_value) };
-   for (short index { 0 }; index != _ticks; ++index) {
-      x_axis[pos_ticks[index]] = '+';
-      string value_string { std::to_string(value) };
-      numbers.replace(pos_ticks[index], 1, value_string);
-      value += divided_distance;
+   if (_ticks == 0 && _view_bars > bars.size()) {
+      _ticks = bars.size();
+   } else if (_ticks == 0) {
+      _ticks = _view_bars;
+   } else if (_ticks > bars.size()) {
+      _ticks = bars.size();
    }
 
-   x_axis += '>';
+   double maximum_value { ceil(bars.front()->getValue() / 100) * 100 };
+   double minimum_value { floor(bars[_ticks - 1]->getValue() / 100) * 100 };
+   double divided { floor((maximum_value - minimum_value) / _ticks) };
 
-   cout << x_axis << "\n";
-   cout << numbers << "\n";
+   double values[_ticks + 1];
+   values[0] = 0;
+
+   double value { minimum_value };
+
+   for (short index { 1 }; index != _ticks; ++index) {
+      values[index] = value;
+      value += divided;
+   }
+
+   values[_ticks] = maximum_value;
+
+   for (short tick { 0 }; tick != _ticks + 1; ++tick) {
+      short position { static_cast<short>(
+        values[tick] * bar_size / values[_ticks]) };
+
+      axis_x[position] = '+';
+
+      string value_str = to_string(static_cast<int>(values[tick]));
+      axis_x_numbers.replace(position, value_str.size(), value_str);
+   }
+
+   cout << axis_x << "\n";
+   cout << setStyle(axis_x_numbers, yellow, -1, bold) << "\n";
 }

@@ -125,6 +125,10 @@ namespace fos {
          }
       }
 
+      if (!divided.empty()) {
+         split_tokens.push_back(divided);
+      }
+
       return split_tokens;
    }
 

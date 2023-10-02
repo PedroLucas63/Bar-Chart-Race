@@ -61,12 +61,12 @@ int main(int argc, char* argv[]) {
    bar_chart3.addBar(&bar3_4);
    bar_chart3.addBar(&bar3_5);
 
-   Bar bar4_1 {"Pedro", "", "Masculino", 10};
-   Bar bar4_2 {"Moisés", "", "Masculino", 20};
-   Bar bar4_3 {"Ana", "", "Feminino", 500};
-   Bar bar4_4 {"Renata", "", "Feminino", 23};
-   Bar bar4_5 {"Ahtgk", "Klan autres", "Alien", 4};
-   Bar bar4_6 {"Jdoii", "Klan Uhinh", "Alien", 25};
+   Bar bar4_1 {"Pedro", "", "Masculino", 29356};
+   Bar bar4_2 {"Moisés", "", "Masculino", 3232};
+   Bar bar4_3 {"Ana", "", "Feminino", 32434};
+   Bar bar4_4 {"Renata", "", "Feminino", 23644};
+   Bar bar4_5 {"Ahtgk", "Klan autres", "Alien", 32244};
+   Bar bar4_6 {"Jdoii", "Klan Uhinh", "Alien", 2245};
 
    BarChart bar_chart4 {"01-01-2002"};
    bar_chart4.addBar(&bar4_1);
@@ -76,7 +76,7 @@ int main(int argc, char* argv[]) {
    bar_chart4.addBar(&bar4_5);
    bar_chart4.addBar(&bar4_6);
 
-   Database database { "Nomes de crianças no século XXI", "Milhões", "Source: NASA"};
+   Database database { "Nomes de criancas no seculo XXI\nNovidades do oriente", "Milhoes", "Source: NASA"};
    database.addCategory("Masculino", fos::foreground::blue);
    database.addCategory("Feminino", fos::foreground::red);
    database.addBarChart(&bar_chart1);
@@ -85,15 +85,15 @@ int main(int argc, char* argv[]) {
    database.addBarChart(&bar_chart3);
    database.addBarChart(&bar_chart4);
 
-   database.draw(1, 40, 6, 5);
+   database.draw(1, 40, 6, 0, 80);
 
    // Main game loop.
-   while (!app.gameOver()) {
+   /*while (!app.gameOver()) {
       app.processEvent(); ///< Process game events
       app.update(); ///< Update the game state
       app.render(); ///< Render the game
       // The loop continues until the game is over
-   }
+   }*/
 
    app.destruct(); ///< Clean up the GameController instance
 
