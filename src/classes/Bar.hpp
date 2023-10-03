@@ -26,6 +26,8 @@ using std::cout;
 #include <sstream> /// ostringstream
 using std::ostringstream;
 
+#include <iomanip>
+
 ///< Definition of system constants >//
 constexpr short DEFAULT_BAR_COLOR {
    fos::foreground::green
@@ -55,7 +57,7 @@ class Bar {
     * @param value_ The value associated with the bar
     */
    Bar(
-     string label_, string other_related_info_, string category_, double value_)
+     string label_, string other_related_info_, string category_, double long value_)
        : label(label_)
        , other_related_info(other_related_info_)
        , category(category_)
@@ -105,7 +107,7 @@ class Bar {
     * @brief Get the value associated with the bar
     * @return The value of the bar as a double
     */
-   double getValue() const;
+   double long getValue() const;
 
    /**
     * @brief Set the label of the bar
@@ -129,7 +131,7 @@ class Bar {
     * @brief Set the value associated with the bar
     * @param value_ The value to set for the bar
     */
-   void setValue(double value_);
+   void setValue(double long value_);
 
    /**
     * @brief Draw and render the bar graphically
@@ -139,14 +141,14 @@ class Bar {
     * @param _color The color to use for rendering the bar (default:
     * DEFAULT_BAR_COLOR)
     */
-   void draw(short bar_size, double _base_value = 0,
+   void draw(short bar_size, double long _base_value = 0,
      short const _color = DEFAULT_BAR_COLOR) const;
 
    private:
    string label; ///< The label of the bar
    string other_related_info; ///< Additional information related to the bar
    string category; ///< The category to which the bar belongs
-   double value; ///< The value associated with the bar
+   double long value; ///< The value associated with the bar
 };
 
 #endif /// BAR_HPP_

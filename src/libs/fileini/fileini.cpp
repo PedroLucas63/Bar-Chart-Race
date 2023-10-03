@@ -1,10 +1,11 @@
 /**
  * @file fileini.cpp
- * @brief Implementation of the FileIni class for handling .ini files and its methods.
+ * @brief Implementation of the FileIni class for handling .ini files and its
+ * methods.
  * @author Pedro Lucas (pedrolucas.jsrn@gmail.com)
  * @version 1.0
  * @date 2023-09-27
- * 
+ *
  * @copyright Copyright (c) 2023
  */
 
@@ -17,7 +18,9 @@ FileIni::FileIni(string local_file) {
 
 /// Overloaded subscript operator for accessing values by section
 map<string, string> FileIni::operator[](string section) const {
-   return configs.at(section);
+   try {
+      return configs.at(section);
+   } catch (...) { return {}; }
 }
 
 /// Opens and loads the specified .ini file
@@ -25,7 +28,8 @@ void FileIni::open(string local_file) {
    ifstream file(local_file);
 
    if (!file.is_open()) {
-      throw std::runtime_error("The .ini file does not exist or cannot be opened.");
+      throw std::runtime_error(
+        "The .ini file does not exist or cannot be opened.");
    }
 
    string line;
@@ -49,13 +53,13 @@ void FileIni::open(string local_file) {
             last_section = section;
             catch_section = false;
          } else if (c == '\"' && catch_section && !get_quotes) {
-            get_quotes = true; 
+            get_quotes = true;
          } else if (c == '\"' && catch_section && get_quotes) {
             get_quotes = false;
          } else if (catch_section) {
             section += c;
          } else if (c == '\"' && !get_key && !get_quotes) {
-            get_quotes = true; 
+            get_quotes = true;
          } else if (c == '\"' && !get_key && get_quotes) {
             get_quotes = false;
          } else if (c == '=' && !get_key && get_quotes) {
@@ -65,7 +69,7 @@ void FileIni::open(string local_file) {
          } else if (!get_key) {
             key += c;
          } else if (c == '\"' && get_key && !get_quotes) {
-            get_quotes = true; 
+            get_quotes = true;
          } else if (c == '\"' && get_key && get_quotes) {
             get_quotes = false;
          } else if (!get_value) {

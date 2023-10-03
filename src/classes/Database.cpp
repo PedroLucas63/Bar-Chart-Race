@@ -54,7 +54,7 @@ void Database::addBarChart(BarChart const* bar_chart) {
 }
 
 void Database::draw(short fps, short bar_size, short _view_bars, short _ticks,
-  short _terminal_size) {
+  short _terminal_size) const {
    for (shared_ptr<BarChart> bar_chart : bar_charts) {
       std::chrono::milliseconds time(1000 / fps);
       std::this_thread::sleep_for(time);

@@ -24,10 +24,17 @@
 #include "utils.hpp"
 
 #include "fstring.hpp" /// aligment, center, repeat, setStyle
+using fos::trim;
 using fos::alignment;
+using fos::splitWithEmpty;
 using fos::center;
+using fos::foreground::green;
 using fos::repeat;
 using fos::setStyle;
+
+#include "Database.hpp"
+
+#include "fileini.hpp"
 
 #include <iostream> /// cerr, cin, cout
 using std::cerr;
@@ -39,7 +46,26 @@ using std::vector;
 
 #include <string> /// getline, string
 using std::getline;
+using std::stoi;
+using std::stof;
+using std::stold;
 using std::string;
+
+#include <map>
+using std::map;
+
+#include <sstream>
+using std::ostringstream;
+
+#include <fstream>
+using std::ifstream;
+
+constexpr short MINIMUM_TICKS { 0 };
+constexpr short MINIMUM_TERMINAL_SIZE { 20 };
+constexpr short MAXIMUM_TERMINAL_SIZE { 512 };
+
+constexpr short HEADER_SIZE { 3 };
+
 
 /**
  * @brief GameController class that controls the game flow
@@ -122,6 +148,8 @@ class GameController {
      instance; ///< Pointer to singleton instance to GameController
    GameState game_state; ///< Current game state
    ProgramConfig program_config; ///< Program configuration
+   Database database;
+   bool aborted { false };
 
    /**
     * @brief Deleted copy constructor
@@ -156,6 +184,23 @@ class GameController {
     * @brief Render the help message
     */
    void renderHelper() const;
+
+   void renderDrawing() const;
+
+
+   void processConfigs();
+
+   void processFPS(string buffer);
+   void processBars(string buffer);
+   void processBarSize(string buffer);
+   void processColors(string buffer);
+   void processColumns(string buffer);
+   void processTicks(string buffer);
+   void processTerminalSize(string buffer);
+
+   void processData();
+
+   bool isQuantify(string line);
 };
 
 #endif /// GAME_CONTROLLER_HPP_

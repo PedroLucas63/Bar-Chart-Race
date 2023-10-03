@@ -56,7 +56,7 @@ class Database {
    void addCategory(string text, short color);
    void addBarChart(BarChart const* bar_chart);
 
-   void draw(short fps, short bar_size, short _view_bars = 0, short _ticks = 0, short _terminal_size = 0);
+   void draw(short fps, short bar_size, short _view_bars = 0, short _ticks = 0, short _terminal_size = 0) const;
 
    private:
    string title;

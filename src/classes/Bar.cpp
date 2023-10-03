@@ -38,7 +38,7 @@ string Bar::getCategory() const {
 }
 
 // Get the value associated with the bar
-double Bar::getValue() const {
+double long Bar::getValue() const {
    return value;
 }
 
@@ -58,12 +58,12 @@ void Bar::setCategory(string category_) {
 }
 
 // Set the value associated with the bar
-void Bar::setValue(double value_) {
+void Bar::setValue(double long value_) {
    value = value_;
 }
 
 // Draw and render the bar graphically
-void Bar::draw(short bar_size, double _base_value, short const _color) const {
+void Bar::draw(short bar_size, double long _base_value, short const _color) const {
    short size;
    if (_base_value == 0) {
       size = bar_size;
@@ -79,7 +79,8 @@ void Bar::draw(short bar_size, double _base_value, short const _color) const {
       oss << setStyle(buffer, _color) << " ";
    }
 
-   oss << "[" << value << "]";
+   oss << std::fixed << std::setprecision(2);
+   oss << "[" << std::fixed << value << "]";
 
    cout << oss.str() << "\n";
 }

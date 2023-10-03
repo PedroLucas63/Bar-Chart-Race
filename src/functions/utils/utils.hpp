@@ -39,11 +39,11 @@ constexpr bool DEFAULT_HELP_MENU { false };
 
 /// Default bar chart columns configurations
 constexpr short COLUMNS { 5 };
-constexpr short COLUMN_1 { 1 };
-constexpr short COLUMN_2 { 2 };
+constexpr short COLUMN_1 { 0 };
+constexpr short COLUMN_2 { 1 };
 constexpr short COLUMN_3 { -1 }; ///< Disable
-constexpr short COLUMN_4 { 4 };
-constexpr short COLUMN_5 { 5 };
+constexpr short COLUMN_4 { 3 };
+constexpr short COLUMN_5 { 4 };
 
 /**
  * @struct ProgramConfig
