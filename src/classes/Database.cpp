@@ -40,10 +40,18 @@ void Database::setScale(string scale_) {
 void Database::setSource(string source_) {
    source = source_;
 }
-void Database::addCategory(string text, short color) {
+bool Database::addCategory(string text, short color) {
    if (categories.find(text) == categories.end()) {
       categories[text] = color;
+         if (categories.size() > NUMBER_OF_COLORS) {
+      for (auto& category : categories) {
+         category.second = fos::foreground::green;
+      }
    }
+   return true;
+   }
+
+   return false;
 }
 
 void Database::addBarChart(BarChart const* bar_chart) {
@@ -73,9 +81,11 @@ void Database::draw(short fps, short bar_size, short _view_bars, short _ticks,
       cout << setStyle(scale, yellow, -1, bold) << "\n\n";
       cout << setStyle(source, -1, -1, bold) << "\n";
 
+      if (categories.size() <= NUMBER_OF_COLORS) {
       for (auto category : categories) {
          cout << setStyle("\u2588", category.second, -1, bold) << ": ";
          cout << setStyle(category.first, category.second, -1, bold) << " ";
+      }
       }
 
       cout << "\n\n";

@@ -37,6 +37,8 @@ using fos::foreground::yellow;
 using fos::align::center;
 using fos::style::bold;
 
+constexpr short NUMBER_OF_COLORS { 14 };
+
 class Database {
    public:
 
@@ -53,7 +55,7 @@ class Database {
    void setTitle(string title_);
    void setScale(string scale_);
    void setSource(string source_);
-   void addCategory(string text, short color);
+   bool addCategory(string text, short color);
    void addBarChart(BarChart const* bar_chart);
 
    void draw(short fps, short bar_size, short _view_bars = 0, short _ticks = 0, short _terminal_size = 0) const;

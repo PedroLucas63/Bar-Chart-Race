@@ -107,8 +107,18 @@ void BarChart::drawAxisX(
       _ticks = bars.size();
    }
 
+   short last_bar;
+
+   if (_ticks < _view_bars && _view_bars < bars.size()) {
+      last_bar = _view_bars - 1;
+   } else if (_ticks < _view_bars) {
+      last_bar = bars.size() - 1;
+   } else {
+      last_bar = _ticks - 1;
+   }
+
    double maximum_value { ceil(bars.front()->getValue() / 100) * 100 };
-   double minimum_value { floor(bars[_ticks - 1]->getValue() / 100) * 100 };
+   double minimum_value { floor(bars[last_bar]->getValue() / 100) * 100 };
    double divided { floor((maximum_value - minimum_value) / _ticks) };
 
    double values[_ticks + 1];

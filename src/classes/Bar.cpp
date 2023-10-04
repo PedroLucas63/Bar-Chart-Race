@@ -78,7 +78,7 @@ void Bar::draw(short bar_size, double long _base_value, short const _color) cons
       string buffer { "(" + other_related_info + ")" };
       oss << setStyle(buffer, _color) << " ";
    }
-
+   
    oss << std::fixed << std::setprecision(2);
    oss << "[" << std::fixed << value << "]";
 

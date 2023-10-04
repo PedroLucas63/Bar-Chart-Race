@@ -66,6 +66,22 @@ constexpr short MAXIMUM_TERMINAL_SIZE { 512 };
 
 constexpr short HEADER_SIZE { 3 };
 
+short const LIST_OF_COLORS[NUMBER_OF_COLORS] = {
+   fos::foreground::red,
+   fos::foreground::green,
+   fos::foreground::yellow,
+   fos::foreground::blue,
+   fos::foreground::magenta,
+   fos::foreground::cyan,
+   fos::foreground::white,
+   fos::foreground::bright_red,
+   fos::foreground::bright_green,
+   fos::foreground::bright_yellow,
+   fos::foreground::bright_blue,
+   fos::foreground::bright_magenta,
+   fos::foreground::bright_cyan,
+   fos::foreground::bright_white,
+};
 
 /**
  * @brief GameController class that controls the game flow

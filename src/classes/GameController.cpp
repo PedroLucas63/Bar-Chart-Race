@@ -369,6 +369,7 @@ void GameController::processData() {
    }
 
    int bar_chart_number { 0 };
+   int categories { 0 };
 
    while (getline(file >> std::ws, buffer)) {
       int quantify { 0 };
@@ -415,8 +416,11 @@ void GameController::processData() {
            other_info,
            columns[program_config.select_columns[4]],
            value);
-
-         database.addCategory(columns[program_config.select_columns[4]], green);
+         
+         
+         if(database.addCategory(columns[program_config.select_columns[4]], LIST_OF_COLORS[categories % NUMBER_OF_COLORS])) {
+            ++categories;
+         }
 
          bar_chart->addBar(bar);
 
