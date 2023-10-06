@@ -65,6 +65,8 @@ void GameController::processEvent() {
          break;
       case PROCESS_DATA:
          processData();
+         break;
+      case INFORMATIONS:
          getline(cin, buffer);
          break;
       default:
@@ -99,8 +101,11 @@ void GameController::update() {
          if (aborted) {
             game_state = ENDING;
          } else {
-            game_state = ANIMATION;
+            game_state = INFORMATIONS;
          }
+         break;
+      case INFORMATIONS:
+         game_state = ANIMATION;
          break;
       case ANIMATION:
          game_state = ENDING;
@@ -119,12 +124,16 @@ void GameController::render() {
       case HELPER:
          renderHelper();
          break;
-      case PROCESS_CONFIGS:
-         break;
-      case PROCESS_DATA:
+      case INFORMATIONS:
+         renderInformations();
          break;
       case ANIMATION:
          renderDrawing();
+         break;
+      case ENDING:
+         if (aborted) {
+            renderWarnings();
+         }
          break;
       default:
          break;
@@ -139,7 +148,13 @@ void GameController::renderWelcome() const {
 
    cout << repeat("=", column_size) << "\n";
    cout << alignment(welcome, column_size, center, ' ') << "\n";
-   cout << repeat("=", column_size) << "\n";
+   cout << repeat("=", column_size) << "\n\n";
+
+   ostringstream oss;
+   oss << ">>> Preparing to read input file \"" << program_config.data_file
+       << "\"...\n"
+          ">>> Processing data, please wait.\n";
+   cout << setStyle(oss.str(), green);
 }
 
 // Render a help message with available command-line options
@@ -149,12 +164,45 @@ void GameController::renderHelper() const {
            "\t-b  <num> Max # of bars in a single char.\n"
            "\t\tValid range is [1,15]. Default value is 5.\n"
            "\t-f  <num> Animation speed in fps (frames per second).\n"
-           "\t\tValid range is [1,24]. Default value is 24.\n";
-   "\t-c  <local> Configuration file location.\n";
+           "\t\tValid range is [1,24]. Default value is 24.\n"
+           "\t-c  <local> Configuration file location.\n";
 
    cout << program_config.data_file << "\n";
 }
 
+// Render information about the game and data
+void GameController::renderInformations() const {
+   ostringstream oss;
+   oss << ">>> Input file successfully read\n\n";
+   oss << ">>> We have \"" << database.getBarCharts().size()
+       << "\" graphs, with at most \"" << max_number_of_bars << "\" bars\n\n";
+   oss << ">>> Animation speed is: " << program_config.frames_per_second
+       << "\n";
+   oss << ">>> Title: " << database.getTitle() << "\n";
+   oss << ">>> Values is: " << database.getScale() << "\n";
+   oss << ">>> Source: " << database.getSource() << "\n";
+   oss << ">>> Number of categories found: " << database.getCategories().size()
+       << "\n\n";
+
+   cout << setStyle(oss.str(), green);
+
+   renderWarnings();
+
+   cout << setStyle(">>> Press enter to begin the animation\n", green);
+}
+
+// Render warnings if there are any
+void GameController::renderWarnings() const {
+   if (!program_config.warnings.empty()) {
+      cout << setStyle(">>> Warnings:\n", yellow);
+      for (string warning : program_config.warnings) {
+         cout << setStyle("\t>>> " + warning + "\n", yellow);
+      }
+      cout << "\n";
+   }
+}
+
+// Render the drawing using database information
 void GameController::renderDrawing() const {
    database.draw(program_config.frames_per_second,
      program_config.bars_size,
@@ -163,6 +211,7 @@ void GameController::renderDrawing() const {
      program_config.terminal_size);
 }
 
+// Process configurations from the configuration file
 void GameController::processConfigs() {
    try {
       FileIni file { program_config.config_file };
@@ -204,65 +253,72 @@ void GameController::processConfigs() {
    }
 }
 
+// Process FPS configuration from the input buffer
 void GameController::processFPS(string buffer) {
    try {
       short fps_converted { static_cast<short>(stoi(buffer)) };
 
       if (fps_converted < MINIMUM_FPS || fps_converted > MAXIMUM_FPS) {
-         ostringstream oss;
-         oss << "The value of fps must be between [" << MINIMUM_FPS << ", "
-             << MAXIMUM_FPS << "]. The default value will be set.";
-         program_config.warnings.push_back(oss.str());
+         // Warn if FPS value is out of range
+         program_config.warnings.push_back("The value of fps must be between ["
+           + to_string(MINIMUM_FPS) + ", " + to_string(MAXIMUM_FPS)
+           + "]. The default value will be set.");
       } else {
          program_config.frames_per_second = fps_converted;
       }
    } catch (...) {
-      string error { "The value of fps must be of type "
-                     "integer. The default value will be set." };
-      program_config.warnings.push_back(error);
+      // Warn if FPS value is not an integer
+      program_config.warnings.push_back(
+        "The value of fps must be of type integer. The default value will be "
+        "set.");
    }
 }
 
+// Process bars configuration from the input buffer
 void GameController::processBars(string buffer) {
    try {
       short bars_converted { static_cast<short>(stoi(buffer)) };
 
       if (bars_converted < MINIMUM_BARS || bars_converted > MAXIMUM_BARS) {
-         ostringstream oss;
-         oss << "The value of bars must be between [" << MINIMUM_BARS << ", "
-             << MAXIMUM_BARS << "]. The default value will be set.";
-         program_config.warnings.push_back(oss.str());
+         // Warn if the number of bars is out of range
+         program_config.warnings.push_back("The value of bars must be between ["
+           + to_string(MINIMUM_BARS) + ", " + to_string(MAXIMUM_BARS)
+           + "]. The default value will be set.");
       } else {
          program_config.number_of_bars = bars_converted;
       }
    } catch (...) {
-      string error { "The value of bars must be of type "
-                     "integer. The default value will be set." };
-      program_config.warnings.push_back(error);
+      // Warn if the number of bars is not an integer
+      program_config.warnings.push_back(
+        "The value of bars must be of type integer. The default value will be "
+        "set.");
    }
 }
 
+// Process bar size configuration from the input buffer
 void GameController::processBarSize(string buffer) {
    try {
       short bar_size_converted { static_cast<short>(stoi(buffer)) };
 
       if (bar_size_converted < MINIMUM_BARS_SIZE
         || bar_size_converted > MAXIMUM_BARS_SIZE) {
-         ostringstream oss;
-         oss << "The value of bars size must be between [" << MINIMUM_BARS_SIZE
-             << ", " << MAXIMUM_BARS_SIZE
-             << "]. The default value will be set.";
-         program_config.warnings.push_back(oss.str());
+         // Warn if bar size is out of range
+         program_config.warnings.push_back(
+           "The value of bars size must be between ["
+           + to_string(MINIMUM_BARS_SIZE) + ", " + to_string(MAXIMUM_BARS_SIZE)
+           + "]. The default value will be set.");
       } else {
          program_config.bars_size = bar_size_converted;
       }
    } catch (...) {
-      string error { "The value of bars size must be of type "
-                     "integer. The default value will be set." };
-      program_config.warnings.push_back(error);
+      // Warn if bar size is not an integer
+      program_config.warnings.push_back(
+        "The value of bars size must be of type integer. The default value "
+        "will be set.");
    }
 }
 
+// Process colors configuration from the input buffer
 void GameController::processColors(string buffer) {
    if (buffer == "true") {
       program_config.colors = true;
@@ -271,32 +327,36 @@ void GameController::processColors(string buffer) {
    }
 }
 
+// Process columns configuration from the input buffer
 void GameController::processColumns(string buffer) {
    vector<string> columns { splitWithEmpty(buffer, ";") };
 
-   if (columns.size() != 5) {
+   if (columns.size() == 5) {
       bool error = false;
       for (short column { 0 }; column != 5; ++column) {
          try {
             program_config.select_columns[column] = stoi(columns[column]);
 
             if (column != 2 && program_config.select_columns[column] < 0) {
-               string error { "Only the third option can be disabled. The "
-                              "default value will be set." };
-               program_config.warnings.push_back(error);
+               // Warn if an invalid column value is found
+               program_config.warnings.push_back(
+                 "Only the third option can be disabled. The default value "
+                 "will be set.");
                error = true;
                break;
             }
          } catch (...) {
-            string error { "The column index must be an integer. The "
-                           "default value will be set." };
-            program_config.warnings.push_back(error);
+            // Warn if a column index is not an integer
+            program_config.warnings.push_back(
+              "The column index must be an integer. The default value will be "
+              "set.");
             error = true;
             break;
          }
       }
 
       if (error) {
+         // Reset to default values if there was an error
          program_config.select_columns[0] = COLUMN_1;
          program_config.select_columns[1] = COLUMN_2;
          program_config.select_columns[2] = COLUMN_3;
@@ -305,49 +365,57 @@ void GameController::processColumns(string buffer) {
       }
    }
 }
+
+// Process ticks configuration from the input buffer
 void GameController::processTicks(string buffer) {
    try {
       short ticks_converted { static_cast<short>(stoi(buffer)) };
 
       if (ticks_converted < MINIMUM_TICKS) {
-         ostringstream oss;
-         oss << "The number of ticks cannot be less than " << MINIMUM_TICKS
-             << ". The default value will be set.";
-         program_config.warnings.push_back(oss.str());
+         // Warn if the number of ticks is less than the minimum allowed
+         program_config.warnings.push_back(
+           "The number of ticks cannot be less than " + to_string(MINIMUM_TICKS)
+           + ". The default value will be set.");
       } else {
-         program_config.bars_size = ticks_converted;
+         program_config.ticks = ticks_converted;
       }
    } catch (...) {
-      string error { "The value of ticks must be of type "
-                     "integer. The default value will be set." };
-      program_config.warnings.push_back(error);
+      // Warn if the ticks value is not an integer
+      program_config.warnings.push_back(
+        "The value of ticks must be of type integer. The default value will be "
+        "set.");
    }
 }
+
+// Process terminal size configuration from the input buffer
 void GameController::processTerminalSize(string buffer) {
    try {
       short terminal_size_converted { static_cast<short>(stoi(buffer)) };
 
       if (terminal_size_converted < MINIMUM_TERMINAL_SIZE
         || terminal_size_converted > MAXIMUM_TERMINAL_SIZE) {
-         ostringstream oss;
-         oss << "The value of terminal size must be between ["
-             << MINIMUM_TERMINAL_SIZE << ", " << MAXIMUM_TERMINAL_SIZE
-             << "]. The default value will be set.";
-         program_config.warnings.push_back(oss.str());
+         // Warn if the terminal size is out of range
+         program_config.warnings.push_back(
+           "The value of terminal size must be between ["
+           + to_string(MINIMUM_TERMINAL_SIZE) + ", "
+           + to_string(MAXIMUM_TERMINAL_SIZE)
+           + "]. The default value will be set.");
       } else {
          program_config.terminal_size = terminal_size_converted;
       }
    } catch (...) {
-      string error { "The value of terminal size must be of type "
-                     "integer. The default value will be set." };
-      program_config.warnings.push_back(error);
+      // Warn if the terminal size is not an integer
+      program_config.warnings.push_back(
+        "The value of terminal size must be of type integer. The default value "
+        "will be set.");
    }
 }
-
+// Open and process data from the input file
 void GameController::processData() {
    ifstream file { program_config.data_file };
 
    if (!file.is_open()) {
+      // Warn if the data file cannot be opened
       program_config.warnings.push_back(
         "The data file does not exist or cannot be opened.\n Aborted!");
       aborted = true;
@@ -360,45 +428,80 @@ void GameController::processData() {
       getline(file >> std::ws, buffer);
 
       if (header == 0) {
+         // Set the title of the database from the first line
          database.setTitle(buffer);
       } else if (header == 1) {
+         // Set the scale of the database from the second line
          database.setScale(buffer);
       } else {
+         // Set the source of the database from the third line
          database.setSource(buffer);
       }
    }
 
    int bar_chart_number { 0 };
    int categories { 0 };
+   bool line_error { false };
+   int quantify_buffer { 0 };
 
    while (getline(file >> std::ws, buffer)) {
       int quantify { 0 };
+      string buffer_line;
 
       if (isQuantify(buffer)) {
          quantify = stoi(buffer);
+      } else if (line_error) {
+         quantify = quantify_buffer;
+         line_error = false;
+         buffer_line = buffer;
       }
 
       BarChart* bar_chart = new BarChart();
 
       int bar_number { 0 };
       for (int line { 0 }; line != quantify; ++line) {
-         getline(file >> std::ws, buffer);
+         if (buffer_line.empty()) {
+            getline(file >> std::ws, buffer);
+         } else {
+            buffer = buffer_line;
+            buffer_line.clear();
+         }
 
          if (isQuantify(buffer)) {
-            quantify = stoi(buffer);
+            quantify_buffer = stoi(buffer);
+            line_error = true;
 
             ostringstream oss;
             oss << "The Number Bar chart " << bar_chart_number
                 << " has less data than specified.";
             program_config.warnings.push_back(oss.str());
-
             break;
          }
 
          vector<string> columns { splitWithEmpty(buffer, ",") };
          string other_info;
 
+         bool restart_for { false };
+
+         for (short index { 0 }; index < COLUMNS; ++index) {
+            if (program_config.select_columns[index] != -1
+              && program_config.select_columns[index] > columns.size()) {
+               // Warn if a bar has fewer columns than specified
+               ostringstream oss;
+               oss << "One of the bars in the " << bar_chart_number
+                   << " bar chart has fewer columns than specified";
+               program_config.warnings.push_back(oss.str());
+               restart_for = true;
+               break;
+            }
+         }
+
+         if (restart_for) {
+            continue;
+         }
+
          if (bar_number == 0) {
+            // Set the time stamp of the bar chart from the first column
             bar_chart->setTimeStamp(columns[program_config.select_columns[0]]);
          }
 
@@ -412,13 +515,21 @@ void GameController::processData() {
             value = stold(columns[program_config.select_columns[3]]);
          } catch (...) { value = 0; }
 
+         // Create and add a bar to the current bar chart
          Bar* bar = new Bar(columns[program_config.select_columns[1]],
            other_info,
            columns[program_config.select_columns[4]],
            value);
-         
-         
-         if(database.addCategory(columns[program_config.select_columns[4]], LIST_OF_COLORS[categories % NUMBER_OF_COLORS])) {
+
+         short color { green };
+         if (program_config.colors) {
+            // Set color based on configuration
+            color = LIST_OF_COLORS[categories % NUMBER_OF_COLORS];
+         }
+
+         if (database.addCategory(
+               columns[program_config.select_columns[4]], color)) {
+            // Add category to the database and track the number of categories
             ++categories;
          }
 
@@ -427,23 +538,30 @@ void GameController::processData() {
          ++bar_number;
       }
 
+      if (max_number_of_bars < bar_number) {
+         // Update the maximum number of bars encountered
+         max_number_of_bars = bar_number;
+      }
+
+      // Add the completed bar chart to the database
       database.addBarChart(bar_chart);
 
       ++bar_chart_number;
    }
 }
 
+// Check if a given string can be converted to an integer, indicating a quantity
 bool GameController::isQuantify(string line) {
    try {
       size_t pos;
       int buffer = std::stoi(line, &pos);
 
-      if (pos == line.length()) {
+      // If the conversion position matches the trimmed line length, it's a
+      // quantity
+      if (pos == trim(line).length()) {
          return true;
       } else {
          return false;
       }
-   } catch (...) {
-      return false;
-   }
+   } catch (...) { return false; }
 }

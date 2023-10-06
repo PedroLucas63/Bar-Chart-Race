@@ -23,17 +23,16 @@
 #include "clioptions.hpp"
 #include "utils.hpp"
 
-#include "fstring.hpp" /// aligment, center, repeat, setStyle
-using fos::trim;
+#include "fstring.hpp" /// aligment, center, repeat, setStyle, splitWithEmpty, trim, green
 using fos::alignment;
-using fos::splitWithEmpty;
 using fos::center;
-using fos::foreground::green;
 using fos::repeat;
 using fos::setStyle;
+using fos::splitWithEmpty;
+using fos::trim;
+using fos::foreground::green;
 
 #include "Database.hpp"
-
 #include "fileini.hpp"
 
 #include <iostream> /// cerr, cin, cout
@@ -44,27 +43,26 @@ using std::cout;
 #include <vector> /// vector
 using std::vector;
 
-#include <string> /// getline, string
+#include <string> /// getline, stof, stoi, stold, string
 using std::getline;
-using std::stoi;
 using std::stof;
+using std::stoi;
 using std::stold;
 using std::string;
 
-#include <map>
+#include <map> /// map
 using std::map;
 
-#include <sstream>
+#include <sstream> /// ostringstream
 using std::ostringstream;
 
-#include <fstream>
+#include <fstream> /// ifstream
 using std::ifstream;
 
-constexpr short MINIMUM_TICKS { 0 };
-constexpr short MINIMUM_TERMINAL_SIZE { 20 };
-constexpr short MAXIMUM_TERMINAL_SIZE { 512 };
-
-constexpr short HEADER_SIZE { 3 };
+constexpr short MINIMUM_TICKS { 0 }; ///< Minimum number of ticks >//
+constexpr short MINIMUM_TERMINAL_SIZE { 20 }; ///< Minimum terminal size >//
+constexpr short MAXIMUM_TERMINAL_SIZE { 512 }; ///< Maximum terminal size >//
+constexpr short HEADER_SIZE { 3 }; ///< Header size >//
 
 short const LIST_OF_COLORS[NUMBER_OF_COLORS] = {
    fos::foreground::red,
@@ -81,7 +79,7 @@ short const LIST_OF_COLORS[NUMBER_OF_COLORS] = {
    fos::foreground::bright_magenta,
    fos::foreground::bright_cyan,
    fos::foreground::bright_white,
-};
+}; ///< List of colors used in categories >//
 
 /**
  * @brief GameController class that controls the game flow
@@ -96,6 +94,7 @@ class GameController {
       HELPER, ///< Helper state
       PROCESS_CONFIGS, ///< Configuration processing state
       PROCESS_DATA, ///< Data processing state
+      INFORMATIONS, ///< Informations about data
       ANIMATION, ///< Animation state
       ENDING, ///< Ending state
    };
@@ -161,18 +160,19 @@ class GameController {
 
    private:
    static GameController*
-     instance; ///< Pointer to singleton instance to GameController
+     instance; ///< Pointer to the singleton instance of GameController
    GameState game_state; ///< Current game state
    ProgramConfig program_config; ///< Program configuration
-   Database database;
-   bool aborted { false };
+   Database database; ///< Database used by the game
+   short max_number_of_bars { 0 }; ///< Maximum number of bars
+   bool aborted { false }; ///< Flag indicating if the game was aborted
 
    /**
     * @brief Deleted copy constructor
     *
     * The copy constructor for GameController is explicitly deleted, preventing
     * the creation of new instances by copying from existing ones. This ensures
-    * that GameController remains a singleton class with only one instance.
+    * that GameController remains a singleton class with only one instance
     *
     * @param other The GameController object to copy (not used)
     */
@@ -184,9 +184,9 @@ class GameController {
     * The copy assignment operator for GameController is explicitly deleted,
     * making it impossible to assign one GameController instance to another.
     * This enforces the singleton pattern, where only one instance of
-    * GameController is allowed.
+    * GameController is allowed
     *
-    * @param other The GameController object to assign from (not used)
+    * @param other The GameController object to assign from (not used).
     * @return Reference to the current GameController instance
     */
    GameController operator=(GameController const&) = delete;
@@ -201,21 +201,78 @@ class GameController {
     */
    void renderHelper() const;
 
+   /**
+    * @brief Render information
+    */
+   void renderInformations() const;
+
+   /**
+    * @brief Render warnings
+    */
+   void renderWarnings() const;
+
+   /**
+    * @brief Render the drawing
+    */
    void renderDrawing() const;
 
-
+   /**
+    * @brief Process game configurations
+    */
    void processConfigs();
 
+   /**
+    * @brief Process frames per second (FPS)
+    * @param buffer The input buffer containing FPS data
+    */
    void processFPS(string buffer);
+
+   /**
+    * @brief Process the maximum number of bars
+    * @param buffer The input buffer containing the maximum number of bars data
+    */
    void processBars(string buffer);
+
+   /**
+    * @brief Process the bar size
+    * @param buffer The input buffer containing bar size data
+    */
    void processBarSize(string buffer);
+
+   /**
+    * @brief Process colors configuration
+    * @param buffer The input buffer containing colors data
+    */
    void processColors(string buffer);
+
+   /**
+    * @brief Process columns configuration
+    * @param buffer The input buffer containing columns data
+    */
    void processColumns(string buffer);
+
+   /**
+    * @brief Process ticks configuration
+    * @param buffer The input buffer containing ticks data
+    */
    void processTicks(string buffer);
+
+   /**
+    * @brief Process terminal size configuration
+    * @param buffer The input buffer containing terminal size data
+    */
    void processTerminalSize(string buffer);
 
+   /**
+    * @brief Process game data
+    */
    void processData();
 
+   /**
+    * @brief Check if a line contains a "quantify" command
+    * @param line The line to check
+    * @return true if the line contains a "quantify" command, false otherwise
+    */
    bool isQuantify(string line);
 };
 
