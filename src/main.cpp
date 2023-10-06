@@ -14,7 +14,7 @@
  * @copyright Copyright (c) 2023
  *
  */
-#include "Database.hpp"
+
 #include "GameController.hpp" ///< Include the GameController class header
 #include <stdlib.h> ///< Include the standard library for EXIT_SUCCESS
 
