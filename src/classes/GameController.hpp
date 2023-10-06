@@ -20,6 +20,7 @@
 #ifndef GAME_CONTROLLER_HPP_
 #define GAME_CONTROLLER_HPP_
 
+#include "BarRaceConfig.h"
 #include "clioptions.hpp"
 #include "utils.hpp"
 

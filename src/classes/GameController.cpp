@@ -143,14 +143,20 @@ void GameController::render() {
 // Render a welcome message with formatting
 void GameController::renderWelcome() const {
    short const column_size = 50;
-   string welcome { "Welcome to the Bar Chart Race v1.0\n"
-                    "Copyright (C) 2023, Pedro Lucas" };
+   ostringstream oss;
+
+   oss << "Welcome to the Bar Chart Race v" << BarRace_VERSION_MAJOR << "."
+       << BarRace_VERSION_MINOR << "\n"
+       << "Copyright (C) 2023, Pedro Lucas";
+
+   string welcome { oss.str() };
+
+   oss.str("");
 
    cout << repeat("=", column_size) << "\n";
    cout << alignment(welcome, column_size, center, ' ') << "\n";
    cout << repeat("=", column_size) << "\n\n";
 
-   ostringstream oss;
    oss << ">>> Preparing to read input file \"" << program_config.data_file
        << "\"...\n"
           ">>> Processing data, please wait.\n";
@@ -159,7 +165,7 @@ void GameController::renderWelcome() const {
 
 // Render a help message with available command-line options
 void GameController::renderHelper() const {
-   cout << "Usage: barchart [<options>] <input_data_file>\n"
+   cout << "Usage: bar-race [<options>] <input_data_file>\n"
            "  Bar Chart Race options:\n"
            "\t-b  <num> Max # of bars in a single char.\n"
            "\t\tValid range is [1,15]. Default value is 5.\n"
@@ -176,13 +182,16 @@ void GameController::renderInformations() const {
    oss << ">>> Input file successfully read\n\n";
    oss << ">>> We have \"" << database.getBarCharts().size()
        << "\" graphs, with at most \"" << max_number_of_bars << "\" bars\n\n";
-   oss << ">>> Animation speed is: " << program_config.frames_per_second
-       << "\n";
+
    oss << ">>> Title: " << database.getTitle() << "\n";
    oss << ">>> Values is: " << database.getScale() << "\n";
    oss << ">>> Source: " << database.getSource() << "\n";
    oss << ">>> Number of categories found: " << database.getCategories().size()
        << "\n\n";
+
+   oss << ">>> Animation speed is: " << program_config.frames_per_second
+       << "\n";
+   oss << ">>> Number of bars is: " << program_config.number_of_bars << "\n\n";
 
    cout << setStyle(oss.str(), green);
 
