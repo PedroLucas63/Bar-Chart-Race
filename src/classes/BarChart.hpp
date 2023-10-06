@@ -19,7 +19,7 @@
 #include "searching.hpp" /// upperBound
 using sch::upperBound;
 
-#include "fstring.hpp" /// setStyle, blue, bold
+#include "fstring.hpp" /// alignment, columnWrap, repeat, setStyle, center, blue, yellow, bold
 using fos::alignment;
 using fos::columnWrap;
 using fos::repeat;
@@ -29,7 +29,7 @@ using fos::foreground::blue;
 using fos::foreground::yellow;
 using fos::style::bold;
 
-#include <string> /// string
+#include <string> /// string, to_string
 using std::string;
 using std::to_string;
 
@@ -50,7 +50,7 @@ using std::map;
 #include <iostream> /// cout
 using std::cout;
 
-#include <math.h>
+#include <math.h> /// ceil, floor, round
 using std::ceil;
 using std::floor;
 using std::round;
@@ -115,12 +115,30 @@ class BarChart {
    void draw(short bar_size, short _view_bars = 0, short _ticks = 0,
      short _terminal_size = 0, map<string, short> _colors = {}) const;
 
-   void drawAxisX(short bar_size, short _view_bars = 0, short _ticks = 0,
-     short _terminal_size = 0) const;
-
    private:
    string time_stamp; ///< The time stamp associated with the BarChart
    vector<shared_ptr<Bar>> bars; ///< A vector of shared pointers to Bar objects
+
+   /**
+    * @brief Draw a horizontal bar below the chart with ticks representing
+    * intervals
+    *
+    * This function draws a horizontal bar below the chart with ticks that
+    * represent intervals between the largest and smallest elements in the
+    * chart. It allows you to customize the size of the bar, the number of
+    * displayed ticks, and the terminal size for proper formatting
+    *
+    * @param bar_size Size of the horizontal bar
+    * @param _view_bars Number of bars to display (0 to show all)
+    * @param _ticks Number of ticks to display on the horizontal bar (0 for
+    * none)
+    * @param _terminal_size Terminal size for proper formatting (0 for default
+    * value)
+    *
+    * @note Ensure that chart data is available before calling this function
+    */
+   void drawAxisX(short bar_size, short _view_bars = 0, short _ticks = 0,
+     short _terminal_size = 0) const;
 };
 
 #endif /// BAR_CHART_HPP_

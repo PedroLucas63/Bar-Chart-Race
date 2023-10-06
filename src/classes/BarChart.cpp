@@ -61,7 +61,8 @@ void BarChart::draw(short bar_size, short _view_bars, short _ticks,
 
    cout << setStyle(buffer, blue, -1, bold) << "\n\n";
 
-   double max_bar_value { bars.front() ? bars.front().get()->getValue() : 0 };
+   long double max_bar_value { !bars.empty() ? bars.front().get()->getValue()
+                                             : 0 };
    _view_bars = _view_bars == 0 ? bars.size() : _view_bars;
    short color { DEFAULT_BAR_COLOR };
 
@@ -84,6 +85,7 @@ void BarChart::draw(short bar_size, short _view_bars, short _ticks,
    drawAxisX(bar_size, _view_bars, _ticks, _terminal_size);
 }
 
+// Draw a horizontal bar below the chart with ticks representing intervals
 void BarChart::drawAxisX(
   short bar_size, short _view_bars, short _ticks, short _terminal_size) const {
 
@@ -113,27 +115,38 @@ void BarChart::drawAxisX(
       last_bar = _view_bars - 1;
    } else if (_ticks < _view_bars) {
       last_bar = bars.size() - 1;
+   } else if (_ticks > _view_bars && _view_bars < bars.size()) {
+      last_bar = _view_bars - 1;
    } else {
       last_bar = _ticks - 1;
    }
 
-   double maximum_value { ceil(bars.front()->getValue() / 100) * 100 };
-   double minimum_value { floor(bars[last_bar]->getValue() / 100) * 100 };
-   double divided { floor((maximum_value - minimum_value) / _ticks) };
+   long double maximum_value { 0 };
+   long double minimum_value { 0 };
+
+   if (!bars.empty()) {
+      maximum_value = ceil(bars.front()->getValue() / 100) * 100;
+   }
+
+   if (bars.size() > last_bar) {
+      minimum_value = floor(bars[last_bar]->getValue() / 100) * 100;
+   }
+
+   long double divided { floor((maximum_value - minimum_value) / _ticks) };
 
    double values[_ticks + 1];
    values[0] = 0;
 
-   double value { minimum_value };
+   long double value { minimum_value };
 
-   for (short index { 1 }; index != _ticks; ++index) {
+   for (short index { 1 }; index < _ticks; ++index) {
       values[index] = value;
       value += divided;
    }
 
    values[_ticks] = maximum_value;
 
-   for (short tick { 0 }; tick != _ticks + 1; ++tick) {
+   for (short tick { 0 }; tick < _ticks + 1; ++tick) {
       short position { static_cast<short>(
         values[tick] * bar_size / values[_ticks]) };
 
