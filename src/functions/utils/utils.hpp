@@ -1,6 +1,5 @@
 /**
  * @file utils.example.hpp
- * @author Pedro Lucas (pedrolucas.jsrn@gmail.com)
  * @brief Header file containing utility structures and constants.
  * @version 1.0
  * @date 2023-09-26
@@ -30,9 +29,11 @@ constexpr short DEFAULT_SIZE_OF_BARS { 40 };
 /// Default enable colors
 constexpr bool DEFAULT_ENABLE_COLORS { true };
 
-constexpr short DEFAULT_NUMBER_OF_TICKS { 5 };
+/// Default number of ticks (introduced comment)
+constexpr short DEFAULT_NUMBER_OF_TICKS { 5 }; ///< Default number of ticks
 
-constexpr short DEFAULT_TERMINAL_SIZE { 80 };
+/// Default terminal size (introduced comment)
+constexpr short DEFAULT_TERMINAL_SIZE { 80 }; ///< Default terminal size
 
 /// Default help menu
 constexpr bool DEFAULT_HELP_MENU { false };
@@ -57,8 +58,8 @@ struct ProgramConfig {
    short select_columns[COLUMNS] {
       COLUMN_1, COLUMN_2, COLUMN_3, COLUMN_4, COLUMN_5
    }; ///< Select columns
-   short ticks { DEFAULT_NUMBER_OF_TICKS };
-   short terminal_size { DEFAULT_TERMINAL_SIZE };
+   short ticks { DEFAULT_NUMBER_OF_TICKS }; ///< Number of ticks
+   short terminal_size { DEFAULT_TERMINAL_SIZE }; ///< Terminal size
    bool colors { DEFAULT_ENABLE_COLORS }; ///< Enable colors
    bool help_menu { DEFAULT_HELP_MENU }; ///< Help menu
    vector<string> warnings; ///< Warnings list
