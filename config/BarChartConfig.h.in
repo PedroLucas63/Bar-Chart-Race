@@ -1,3 +1,0 @@
-// the configured options and settings for BarChart
-#define BarChart_VERSION_MAJOR @BARCHART_VERSION_MAJOR@
-#define BarChart_VERSION_MINOR @BARCHART_VERSION_MINOR@
