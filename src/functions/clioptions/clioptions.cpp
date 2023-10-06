@@ -17,6 +17,7 @@
 
 #include "clioptions.hpp"
 
+// Initializes the unique instance of the CLIOptions class as null
 CLIOptions* CLIOptions::instance = nullptr;
 
 // Gets the single instance of CLIOptions
