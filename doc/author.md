@@ -1,18 +1,17 @@
 # Introduction
 
 <!-- TODO -->
-Breve descrição do projeto.
+The Bar Chart Race project is a 🌟 C++ program that takes a CSV data file and creates an exciting bar chart race animation over time. It's a powerful tool for visualizing data trends and changes, providing an engaging and dynamic way to explore your data.
 
 # Author(s)
 
 <!-- TODO -->
-Indique o nome do autor e email.
+Pedro Lucas Medeiros do Nascimento,
+pedrolucas.jsrn@gmail.com
 
 # Problems found or limitations
 
-<!-- TODO -->
-Lista aqui os problemas encontrados (se houve algum) e as
-possíveis limitações do programa.
+No problems.
 
 # Grading
 
@@ -22,18 +21,20 @@ Preencha os itens que você implementou, indicando qual a nota esperada para cad
 
 Item     | Valor máximo   | Valor esperado
 -------- | :-----: | :-----:
-Read, validate, and process command line arguments | 5 | ??
-Program runs with default values, if no options are provided | 5 | ??
-Read the input data file and store the information in memory    | 10 | ??
-Display a summary of the data read from the input file _before_ the animation starts | 5 | ??
-Display a summary of the running options (set by the user or default values) _before_ the animation starts | 5 | ??
-The project contains at least two classes | 10 | ??
-Create individual bar charts containing all data items for a single date | 10 | ??
-Run the bar chart animation at the correct speed | 10  | ??
-The bar chart anatomy is complete and correct | 30 | ??
-Program handles errors properly | 10 | ??
+Read, validate, and process command line arguments | 5 | 5
+Program runs with default values, if no options are provided | 5 | 5
+Read the input data file and store the information in memory    | 10 | 10
+Display a summary of the data read from the input file _before_ the animation starts | 5 | 5
+Display a summary of the running options (set by the user or default values) _before_ the animation starts | 5 | 5
+The project contains at least two classes | 10 | 10
+Create individual bar charts containing all data items for a single date | 10 | 10
+Run the bar chart animation at the correct speed | 10  | 10
+The bar chart anatomy is complete and correct | 30 | 30
+Program handles errors properly | 10 | 10
 
 # Compiling and Runnig
 
-<!-- TODO -->
-Indique aqui como compilar e executar seu programa.
+```bash
+cmake -S . -B build
+cmake --build build
+```
