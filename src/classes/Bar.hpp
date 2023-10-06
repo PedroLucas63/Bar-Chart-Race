@@ -56,8 +56,8 @@ class Bar {
     * @param category_ The category to which the bar belongs
     * @param value_ The value associated with the bar
     */
-   Bar(
-     string label_, string other_related_info_, string category_, double long value_)
+   Bar(string label_, string other_related_info_, string category_,
+     double long value_)
        : label(label_)
        , other_related_info(other_related_info_)
        , category(category_)

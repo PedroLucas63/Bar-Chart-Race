@@ -63,7 +63,8 @@ void Bar::setValue(double long value_) {
 }
 
 // Draw and render the bar graphically
-void Bar::draw(short bar_size, double long _base_value, short const _color) const {
+void Bar::draw(
+  short bar_size, double long _base_value, short const _color) const {
    short size;
    if (_base_value == 0) {
       size = bar_size;
@@ -78,7 +79,7 @@ void Bar::draw(short bar_size, double long _base_value, short const _color) cons
       string buffer { "(" + other_related_info + ")" };
       oss << setStyle(buffer, _color) << " ";
    }
-   
+
    oss << std::fixed << std::setprecision(2);
    oss << "[" << std::fixed << value << "]";
 
