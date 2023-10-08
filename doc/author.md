@@ -32,7 +32,11 @@ Run the bar chart animation at the correct speed | 10  | 10
 The bar chart anatomy is complete and correct | 30 | 30
 Program handles errors properly | 10 | 10
 
-# Compiling and Runnig
+Teste a configuração de colunas via config.example.ini com o arquivo data/covid19_full.csv
+
+Nota: Se funcionar foi eu quem fiz, se não funcionar não foi eu (testado apenas com duas variações de colunas).
+
+# Compiling and Running
 
 ```bash
 cmake -S . -B build

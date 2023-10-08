@@ -73,4 +73,5 @@ Thumbs.db
 /doc/latex
 
 # Data files 
-/data
+data/*
+!data/covid19_full.csv
