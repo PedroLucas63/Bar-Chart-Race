@@ -1,6 +1,6 @@
 # 📊 Bar Chart Race
 
-[![🚀 Download Latest Release](https://img.shields.io/badge/Download-Latest%20Release-blue.svg)](https://github.com/PedroLucas63/bar-chart-race/releases/latest)
+[![🚀 Download Latest Release](https://img.shields.io/badge/Download-Latest%20Release-blue.svg)](https://github.com/PedroLucas63/bar-chart-race/releases/)
 
 ## 📖 Overview
 
